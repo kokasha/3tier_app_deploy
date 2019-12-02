@@ -1,0 +1,42 @@
+---
+- name: Setup the Environment
+  hosts: all
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Copy all Required Files to all Nodes
+      import_role:
+        name: common
+
+- name: Deploy Haproxy
+  hosts: frontends
+  gather_facts: no
+  become: true
+  tags: haproxy
+  tasks:
+    - name: Deploy HAPROXY
+      import_role:
+        name: deploy_haproxy
+      vars:
+        app_port: 8080
+
+- name: Deploy TomCat Server
+  hosts: apps
+  gather_facts: no
+  become: true
+  tags: tomcat
+  tasks:
+    - name: Deploy Tomcat
+      import_role:
+        name: deploy_tomcat
+
+
+- name: Deploy PostgresSQL
+  hosts: appdbs
+  gather_facts: no
+  become: true
+  tags: postgres
+  tasks:
+    - name: Deploy PostgreSQL
+      import_role:
+        name: deploy_postgres

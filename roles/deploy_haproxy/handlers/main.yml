@@ -1,0 +1,6 @@
+---
+# handlers file for deploy_apache
+- name: restart HAproxy
+  service:
+    name: haproxy
+    state: restarted
